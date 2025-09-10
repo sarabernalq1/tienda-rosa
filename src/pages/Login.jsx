@@ -1,31 +1,54 @@
-import { useContext, useState } from 'react'
-import { ShopContext } from '../context/ShopContext'
-import { useNavigate } from 'react-router-dom'
+import { useState, useContext } from "react"
+import { ShopContext } from "../context/ShopContext"
+import { useNavigate, Link } from "react-router-dom"
 
-export default function Login(){
-  const { login, user, logout } = useContext(ShopContext)
-  const [email, setEmail] = useState('')
-  const [pass, setPass] = useState('')
-  const nav = useNavigate()
-  if(user) return (
-    <section className="max-w-6xl mx-auto px-4 py-10">
-      <h3 className="text-2xl font-bold text-pink-700 mb-6">Cuenta</h3>
-      <p>Conectado como <strong>{user.email}</strong></p>
-      <div className="mt-4">
-        <button onClick={()=> { logout(); nav('/') }} className="px-4 py-2 rounded bg-gray-200">Cerrar sesión</button>
-      </div>
-    </section>
-  )
+export default function Login() {
+  const { login } = useContext(ShopContext)
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [error, setError] = useState("")
+  const navigate = useNavigate()
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    const ok = login(email, password)
+    if(ok){
+      navigate("/") // redirigir a inicio
+    } else {
+      setError("Correo o contraseña incorrectos")
+    }
+  }
+
   return (
-    <section className="max-w-6xl mx-auto px-4 py-10">
-      <h3 className="text-2xl font-bold text-pink-700 mb-6">Iniciar sesión (simulado)</h3>
-      <div className="max-w-md">
-        <input className="input mb-2" placeholder="Correo" value={email} onChange={e=>setEmail(e.target.value)} />
-        <input type="password" className="input mb-2" placeholder="Contraseña" value={pass} onChange={e=>setPass(e.target.value)} />
-        <div className="flex gap-2">
-          <button onClick={()=> { login(email); nav('/') }} className="btn-pink">Entrar</button>
-        </div>
+    <div className="flex items-center justify-center min-h-screen bg-pink-50">
+      <div className="bg-white p-8 rounded-2xl shadow-md w-full max-w-sm">
+        <h2 className="text-2xl font-bold text-pink-600 mb-6 text-center">Iniciar sesión</h2>
+        {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <input 
+            type="email" 
+            value={email}
+            onChange={e=>setEmail(e.target.value)}
+            placeholder="Correo electrónico"
+            className="input w-full"
+            required
+          />
+          <input 
+            type="password" 
+            value={password}
+            onChange={e=>setPassword(e.target.value)}
+            placeholder="Contraseña"
+            className="input w-full"
+            required
+          />
+          <button type="submit" className="btn w-full bg-pink-600 text-white">
+            Entrar
+          </button>
+        </form>
+        <p className="mt-4 text-center text-sm">
+          ¿No tienes cuenta? <Link to="/register" className="text-pink-600 hover:underline">Regístrate</Link>
+        </p>
       </div>
-    </section>
+    </div>
   )
 }
