@@ -7,6 +7,7 @@ import ProductDetail from './pages/ProductDetail'
 import Cart from './pages/Cart'
 import Favorites from './pages/Favorites'
 import Login from './pages/Login'
+import Register from './pages/Register'   
 
 export default function App(){
   return (
@@ -20,9 +21,11 @@ export default function App(){
           <Route path='/carrito' element={<Cart/>} />
           <Route path='/favoritos' element={<Favorites/>} />
           <Route path='/login' element={<Login/>} />
+          <Route path='/register' element={<Register/>} /> {/* ✅ nueva ruta */}
         </Routes>
       </main>
       <Footer />
     </div>
   )
 }
+
