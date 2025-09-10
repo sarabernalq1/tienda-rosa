@@ -5,9 +5,10 @@ import { ShopContext } from '../context/ShopContext'
 import categorias from '../data/categorias'
 
 export default function Navbar(){
-  const { cart, favorites, user } = useContext(ShopContext)
+  const { cart, favorites, user, logout } = useContext(ShopContext)
   const [q,setQ] = useState('')
   const navigate = useNavigate()
+
   return (
     <header className="bg-white shadow sticky top-0 z-30">
       <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
@@ -24,7 +25,12 @@ export default function Navbar(){
         <div className="flex-1 max-w-md mx-4 hidden md:block">
           <div className="relative">
             <input value={q} onChange={e=>setQ(e.target.value)} placeholder="Buscar productos..." className="input" />
-            <button onClick={()=>{ if(q) navigate('/'); alert('Buscar: '+q) }} className="absolute right-1 top-1/2 -translate-y-1/2 p-2 rounded-full bg-pink-600 text-white"><Search className="w-4 h-4"/></button>
+            <button 
+              onClick={()=>{ if(q) navigate('/'); alert('Buscar: '+q) }} 
+              className="absolute right-1 top-1/2 -translate-y-1/2 p-2 rounded-full bg-pink-600 text-white"
+            >
+              <Search className="w-4 h-4"/>
+            </button>
           </div>
         </div>
 
@@ -37,7 +43,16 @@ export default function Navbar(){
             <ShoppingCart className="w-6 h-6 text-pink-600" />
             {cart.length>0 && <span className="badge">{cart.length}</span>}
           </Link>
-          <Link to="/login" className="ml-2 text-pink-700">{user? user.email : 'Iniciar sesión'}</Link>
+          {user ? (
+            <>
+              <span className="ml-2 text-pink-700">{user.name}</span>
+              <button onClick={logout} className="ml-2 text-sm bg-pink-600 text-white px-2 py-1 rounded">
+                Salir
+              </button>
+            </>
+          ) : (
+            <Link to="/login" className="ml-2 text-pink-700">Iniciar sesión</Link>
+          )}
         </div>
       </div>
       <div className="bg-pink-100">
